@@ -12,7 +12,7 @@ public class Main {
 		
 		tateti.Inicializar();
 		
-		TurnoJugador maquina = tateti.Turno(TurnoJugador.PRIMERO);
+		TurnoJugador maquina = tateti.Turno(TurnoJugador.SEGUNDO);
 
 		int position;
 
