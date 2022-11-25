@@ -8,11 +8,14 @@ public class Main {
 
 	public static void main(String[] args) {
 
+		
+
+		TurnoJugador maquina = seleccionarNumeroDeJugador();
 		TatetiTDA tateti = new Tateti();
 		
 		tateti.Inicializar();
+		tateti.Turno(maquina);
 		
-		TurnoJugador maquina = tateti.Turno(TurnoJugador.SEGUNDO);
 
 		int position;
 
@@ -53,6 +56,29 @@ public class Main {
 		System.out.println("");
 		System.out.println(msj);
 		System.out.println("");
+	}
+	
+	private static TurnoJugador seleccionarNumeroDeJugador() {
+
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Seleccione numero de jugador (1 o 2):");
+		
+
+		try {
+			int nroJugador = Integer.parseInt(scanner.nextLine());
+			
+			if (nroJugador < 1 || nroJugador > 2 ) {
+				printMensaje("Numero invalido, vuelva a intentar");
+				return seleccionarNumeroDeJugador();
+			}
+			return nroJugador == 1 ? TurnoJugador.SEGUNDO : TurnoJugador.PRIMERO;
+
+		} catch (Exception e) {
+
+			printMensaje("Seleccion invalida, vuelva a intentar.");
+			return seleccionarNumeroDeJugador();
+		}
+		
 	}
 
 }

@@ -9,7 +9,7 @@ public class Tateti implements TatetiTDA {
 	private String O = "O";
 	private int TAM = 3; 
 	private int cont = 0;
-	public int contJ = 9;
+	public int cantJugadas = 9;
 
 	public void Inicializar() {
 		tablero = new int[TAM][TAM];
@@ -46,7 +46,7 @@ public class Tateti implements TatetiTDA {
 					if (EstadoPartida.SIN_GANADOR.equals(estado)) {
 						tablero[fila][col] = this.turnoMaquina.equals(TurnoJugador.SEGUNDO) ? 0 : 1;
 
-						this.setCont();
+						cantJugadas--;
 						estado = getEstadoPartida();
 						juegaLaMaquina();
 					}
@@ -144,7 +144,6 @@ public class Tateti implements TatetiTDA {
 		return EstadoPartida.SIN_GANADOR;
 	}
 
-	// Algoritmo minimax
 	private boolean isTableroCompleto() {
 
 		for (int i = 0; i < TAM; i++) {
@@ -183,11 +182,10 @@ public class Tateti implements TatetiTDA {
 					}
 				}
 			}
-			contJ--;
+			cantJugadas--;
 			tablero[fila][columna] = this.turnoMaquina.equals(TurnoJugador.PRIMERO) ? 0 : 1;
-			System.out.println("Cont:" + cont + " contJ:" + contJ);
-			if(cont == Math.pow(2, contJ)) {
-				System.out.println("Te voy a ganar puto");
+			if(cont == Math.pow(2, cantJugadas)) {
+				System.out.println("La maquina te va a ganar!");
 			}else {
 				cont = 0;
 			}
@@ -246,10 +244,6 @@ public class Tateti implements TatetiTDA {
 					
 					if(aux == -1) {
 						cont++;
-
-						if(contJ <=4) {
-							printTableroActual();
-						}
 					}
 					
 					tablero[n][m] = -1;
@@ -299,18 +293,6 @@ public class Tateti implements TatetiTDA {
 	
 	private boolean isMaquinaPrimero() {
 		return TurnoJugador.PRIMERO.equals(turnoMaquina);
-	}
-
-	@Override
-	public void setCont() {
-		this.contJ--;
-		
-	}
-
-	@Override
-	public int getCont() {
-
-		return this.contJ;
 	}
 
 }
