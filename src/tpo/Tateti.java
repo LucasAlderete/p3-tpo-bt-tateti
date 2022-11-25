@@ -7,7 +7,9 @@ public class Tateti implements TatetiTDA {
 	private EstadoPartida estado;
 	private String X = "X";
 	private String O = "O";
-	private int TAM = 3;
+	private int TAM = 3; 
+	private int cont = 0;
+	public int cantJugadas = 9;
 
 	public void Inicializar() {
 		tablero = new int[TAM][TAM];
@@ -43,6 +45,8 @@ public class Tateti implements TatetiTDA {
 				if (isPosicionLibre) {
 					if (EstadoPartida.SIN_GANADOR.equals(estado)) {
 						tablero[fila][col] = this.turnoMaquina.equals(TurnoJugador.SEGUNDO) ? 0 : 1;
+
+						cantJugadas--;
 						estado = getEstadoPartida();
 						juegaLaMaquina();
 					}
@@ -140,7 +144,6 @@ public class Tateti implements TatetiTDA {
 		return EstadoPartida.SIN_GANADOR;
 	}
 
-	// Algoritmo minimax
 	private boolean isTableroCompleto() {
 
 		for (int i = 0; i < TAM; i++) {
@@ -162,14 +165,15 @@ public class Tateti implements TatetiTDA {
 		if (!isPartidaFinalizada()) {
 			int fila = 0;
 			int columna = 0;
-			int v = Integer.MIN_VALUE;
+			int v = isMaquinaPrimero() ? Integer.MAX_VALUE : Integer.MIN_VALUE ;
 			int aux;
 			for (int i = 0; i < TAM; i++) {
 				for (int j = 0; j < TAM; j++) {
 					if (tablero[i][j] == -1) {
 						tablero[i][j] = 1;
-						aux = min();
-						if (aux > v) {
+						aux = isMaquinaPrimero() ? max() : min();
+						
+						if ((aux > v && !isMaquinaPrimero()) || aux < v && isMaquinaPrimero()) {
 							v = aux;
 							fila = i;
 							columna = j;
@@ -178,7 +182,14 @@ public class Tateti implements TatetiTDA {
 					}
 				}
 			}
+			cantJugadas--;
 			tablero[fila][columna] = this.turnoMaquina.equals(TurnoJugador.PRIMERO) ? 0 : 1;
+			if(cont == Math.pow(2, cantJugadas)) {
+				System.out.println("La maquina te va a ganar!");
+			}else {
+				cont = 0;
+			}
+			
 		}
 		estado = getEstadoPartida();
 	}
@@ -201,6 +212,7 @@ public class Tateti implements TatetiTDA {
 					aux = min();
 					if (aux > v)
 						v = aux;
+					
 					tablero[i][j] = -1;
 
 				}
@@ -229,6 +241,11 @@ public class Tateti implements TatetiTDA {
 					aux = max();
 					if (aux < v)
 						v = aux;
+					
+					if(aux == -1) {
+						cont++;
+					}
+					
 					tablero[n][m] = -1;
 				}
 			}
@@ -242,7 +259,7 @@ public class Tateti implements TatetiTDA {
 			return EstadoPartida.SIN_GANADOR;
 		}
 
-		if (TurnoJugador.PRIMERO.equals(turnoMaquina)) {
+		if (isMaquinaPrimero()) {
 			if (valor == 0) {
 				return EstadoPartida.GANO_LA_MAQUINA;
 			} else {
@@ -272,6 +289,10 @@ public class Tateti implements TatetiTDA {
 				System.out.print("La maquina te gano 😱");
 				break;
 		}
+	}
+	
+	private boolean isMaquinaPrimero() {
+		return TurnoJugador.PRIMERO.equals(turnoMaquina);
 	}
 
 }
