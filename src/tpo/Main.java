@@ -19,11 +19,13 @@ public class Main {
 		if (TurnoJugador.PRIMERO.equals(maquina)) {
 			position = POSICION_INICIO_MAQUINA;
 		} else {
+
 			position = realizarJugada();
 		}
 
 		while (!tateti.Jugar(position)) {
 			position = realizarJugada();
+			
 		}
 
 	}
